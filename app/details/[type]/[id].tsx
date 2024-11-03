@@ -9,7 +9,7 @@ import {
   FlatList,
   TouchableOpacity,
 } from "react-native";
-import { useLocalSearchParams } from "expo-router";
+import { router, useLocalSearchParams } from "expo-router";
 import {
   fetchMovieDetails,
   fetchTvShowDetails,
@@ -158,19 +158,25 @@ const DetailsPage = () => {
           {selectedTab === "cast" && credits && (
             <FlatList
               data={credits.cast}
-              renderItem={({ item }) => (
-                <View style={styles.castMember}>
-                  <Image
-                    source={{
-                      uri: item.profile_path
-                        ? `https://image.tmdb.org/t/p/w185${item.profile_path}`
-                        : "https://via.placeholder.com/80x80.png?text=No+Image",
-                    }}
-                    style={styles.castImage}
-                  />
-                  <Text style={styles.castName}>{item.name}</Text>
-                  <Text style={styles.castCharacter}>As {item.character}</Text>
-                </View>
+              renderItem={({ item: castMember }) => (
+                <TouchableOpacity
+                  onPress={() => router.push(`/details/cast/${castMember.id}`)}
+                >
+                  <View style={styles.castMember}>
+                    <Image
+                      source={{
+                        uri: castMember.profile_path
+                          ? `https://image.tmdb.org/t/p/w185${castMember.profile_path}`
+                          : "https://via.placeholder.com/80x80.png?text=No+Image",
+                      }}
+                      style={styles.castImage}
+                    />
+                    <Text style={styles.castName}>{castMember.name}</Text>
+                    <Text style={styles.castCharacter}>
+                      As {castMember.character}
+                    </Text>
+                  </View>
+                </TouchableOpacity>
               )}
               keyExtractor={(castMember) => castMember.id.toString()}
               horizontal

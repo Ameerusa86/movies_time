@@ -1,4 +1,10 @@
-import { ApiResponse, CreditsResponse, Movie, TvShow } from "@/Types/types";
+import {
+  ApiResponse,
+  CastMember,
+  CreditsResponse,
+  Movie,
+  TvShow,
+} from "@/Types/types";
 import axios from "axios";
 
 const BASE_URL = "https://api.themoviedb.org/3";
@@ -126,6 +132,17 @@ export const fetchSearchResults = async (
     return response.data.results || [];
   } catch (error) {
     console.error("Error fetching search results:", error);
+    throw error;
+  }
+};
+
+// Fetch details for a specific cast member
+export const fetchCastDetails = async (castId: number): Promise<CastMember> => {
+  try {
+    const response = await apiClient.get<CastMember>(`/person/${castId}`);
+    return response.data;
+  } catch (error) {
+    console.error(`Error fetching details for cast ID ${castId}:`, error);
     throw error;
   }
 };
